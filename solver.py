@@ -31,6 +31,9 @@ def write_result(result):
 
 def solve():
     global test_counter
+    raw = read_txt(test_f)
+    with open(test_f, 'r') as f:
+        print(f.read())
     try:
         raw = read_txt(test_f)
         parsed = parse_file(test_f)
