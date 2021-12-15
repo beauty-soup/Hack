@@ -107,25 +107,21 @@ def solve():
 
 
 def check_subterms_proliferation(rules, depth=10):
-    def dfs():
-        nonlocal h
-        while len(stack):
+    def dfs(h):
+        while h:
             t = stack[-1]
             for ch in t.to:
                 for s in stack:
                     if unify(s, TERMS[ch]):
                         return True
                 stack.append(TERMS[ch])
-                dfs()
+                dfs(h-1)
             h -= 1
-            if h == 0:
-                return False
             stack.pop()
     stack = []
     for rule in rules:
-        h = depth
         stack.append(rule[0])
-        if dfs():
+        if dfs(depth):
             return TRUE
     return UNK
 
@@ -134,7 +130,7 @@ if __name__ == '__main__':
     result = UNK
     try:
         result = solve()
-    except timeout.TimeoutError:
+    except Exception:
         result = UNK
     finally:
         write_result(result)
