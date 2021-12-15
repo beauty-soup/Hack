@@ -1,10 +1,5 @@
 from Parser import parse_file, read_txt
-import argparse
-parser = argparse.ArgumentParser()
-
-parser.add_argument('file_path', metavar='-f', type=str,
-                    default=None, nargs=1, help='path to test trs file')
-
+from Unif import unify
 TEST_DIR = 'trs'
 
 tests = dict(
@@ -30,15 +25,15 @@ def write_result(result):
 
 
 def solve():
-    global test_counter
-    raw = read_txt(test_f)
-    with open(test_f, 'r') as f:
-        print(f.read())
     try:
         raw = read_txt(test_f)
         parsed = parse_file(test_f)
     except Exception:
         return SYNTAX_ERROR
+    for row in parsed:
+        print(row[0].unfold())
+        mgu = unify(row[0], row[1])
+        print(mgu)
     return TRUE
 
 

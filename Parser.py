@@ -17,11 +17,21 @@ class Term:
         self.type = type
         self.name = name
         self.args = args or []
+        self.s = self.__str__()
 
     def __str__(self):
         res = self.name
         if self.args:
             res += '(' + ','.join([str(a) for a in self.args]) + ')'
+        return res
+
+    def unfold(self):
+        res = [self]
+        for a in self.args:
+            if a.type == 'constr':
+                res += a.unfold()
+            else:
+                res.append(a)
         return res
 
     def __repr__(self):
