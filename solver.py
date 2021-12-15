@@ -47,7 +47,6 @@ def check_subterms_proliferation(rules):
 
 
 def check_decreasing_lexicographic_order(rules, constructors: list):
-    print('lexer')
     def is_lex_greater(t1: Term, t2: Term) -> bool:
         nonlocal order
         t1_args = t1.args[:-1]
@@ -104,12 +103,6 @@ def solve():
     for t1, t2 in parsed:
         all_terms.append(t1)
         all_terms.append(t2)
-    # for i in range(len(all_terms)):
-    #     for j in range(len(all_terms)):
-    #         if i != j:
-    #             print(unify(all_terms[i], all_terms[j]))
-
-    # print(res)
     return res
 
 
@@ -138,5 +131,10 @@ def check_subterms_proliferation(rules, depth=10):
 
 
 if __name__ == '__main__':
-    result = solve()
-    write_result(result)
+    result = UNK
+    try:
+        result = solve()
+    except timeout.TimeoutError:
+        result = UNK
+    finally:
+        write_result(result)

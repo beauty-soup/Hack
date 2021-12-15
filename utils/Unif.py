@@ -175,5 +175,4 @@ def unify(x: Term, y: Term) -> dict:
     for i, j in ut.bindings.items():
         j = ut.dereference(j)
         mgu[ut.entries[i].functor] = ut.term_string(j)
-    print(mgu)
     return mgu
