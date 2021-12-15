@@ -3,7 +3,7 @@ from utils.Unif import unify
 TEST_DIR = 'trs'
 
 from utils import timeout
-TIMEOUT_LIM = 170
+TIMEOUT_LIM = 160
 from itertools import permutations
 
 tests = dict(
@@ -42,9 +42,6 @@ def check_decreasing_on_signature(rules):
     return True
 
 
-def check_subterms_proliferation(rules):
-    return UNK
-
 
 def check_decreasing_lexicographic_order(rules, constructors: list):
     def is_lex_greater(t1: Term, t2: Term) -> bool:
@@ -68,6 +65,7 @@ def check_decreasing_lexicographic_order(rules, constructors: list):
                 flag = False
                 break
         if flag:
+            # print('lexer')
             return TRUE
     return UNK
 
@@ -80,6 +78,7 @@ def analyze_system(rules, constructors):
             is_decreasing = False
             break
     if is_decreasing:
+        # print('signature')
         if check_decreasing_on_signature(rules) or \
                 check_decreasing_lexicographic_order(rules, constructors):
             return TRUE
@@ -99,10 +98,6 @@ def solve():
     except Exception:
         return SYNTAX_ERROR
     res = analyze_system(parsed, constructors)
-    all_terms = []
-    for t1, t2 in parsed:
-        all_terms.append(t1)
-        all_terms.append(t2)
     return res
 
 
@@ -121,8 +116,8 @@ def check_subterms_proliferation(rules, depth=10):
     for rule in rules:
         stack = [rule[0]]
         if dfs(depth):
+            # print('loop')
             return TRUE
-    # return UNK
     return FALSE
 
 

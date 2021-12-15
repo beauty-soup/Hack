@@ -117,7 +117,7 @@ def parse_first_line(line: Queue):
             assert line.pop() == ',', INCORRECT_SYNTAX_ERROR
             line, var = parse_name(line)
             vars.add(var)
-    assert line.pop() == ']', INCORRECT_SYNTAX_ERROR
+    assert line.pop() == ']' and line.is_empty(), INCORRECT_SYNTAX_ERROR
     return sorted(list(vars))
 
 
