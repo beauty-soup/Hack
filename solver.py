@@ -22,22 +22,6 @@ FALSE = "False"
 UNK = "Unknown"
 
 
-def write_result(result):
-    with open('result', 'w') as f:
-        f.write(result)
-
-@timeout.timeout(TIMEOUT_LIM)
-def solve():
-    try:
-        raw = read_txt(test_f)
-        parsed = parse_file(test_f)
-    except Exception:
-        return SYNTAX_ERROR
-    for row in parsed:
-        mgu = unify(row[0], row[1])
-        print(mgu)
-    return TRUE
-
 
 def is_decreasing_on_signature(t1: Term, t2: Term):
     c1 = t1.constr_count
@@ -78,6 +62,20 @@ def analyze_system(rules):
             check_decreasing_lexicographic_order(rules):
         return TRUE
     return UNK
+
+def write_result(result):
+    with open('result', 'w') as f:
+        f.write(result)
+
+@timeout.timeout(TIMEOUT_LIM)
+def solve():
+    try:
+        parsed = parse_file(test_f)
+    except Exception:
+        return SYNTAX_ERROR
+    # res = analyze_system(parsed)
+    return analyze_system(parsed)
+
 
 
 if __name__ == '__main__':
