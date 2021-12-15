@@ -13,9 +13,20 @@ CONSTRUCTS = dict()
 
 
 class Term:
-    def __init__(self, type: str, name: str, args: list = None):
+    def __init__(self, type: str,
+                 name: str,
+                 double: bool = False,
+                 args: list = None,
+                 constr_count: dict = None):
         self.type = type
         self.name = name
+        self.double = double
+        self.args = args or []
+        self.constr_count = constr_count or {}
+        if self.name in self.constr_count:
+            self.constr_count[self.name] += 1
+        else:
+            self.constr_count[self.name] = 1
         self.args = args or []
         self.s = self.__str__()
 
@@ -24,6 +35,12 @@ class Term:
         if self.args:
             res += '(' + ','.join([str(a) for a in self.args]) + ')'
         return res
+
+    def alpha_transform(self, postfix: int):
+        postfix = str(postfix)
+        for i in range(len(self.args)):
+            if self.args[i].type == 'var':
+                self.args[i] += postfix
 
     def unfold(self):
         res = [self]
@@ -96,25 +113,42 @@ def parse_first_line(line: Queue):
 
 
 def parse_term(line: Queue):
+    def add_constr_count(constr_count, term):
+        for c in term.constr_count:
+            if c in constr_count:
+                constr_count[c] += term.constr_count[c]
+            else:
+                constr_count[c] = term.constr_count[c]
+
+        return constr_count
+
     global CONSTRUCTS
     line, term_name = parse_name(line)
     if term_name in VARS:
         return line, Term('var', term_name)
     if line.peek() != '(':
-        assert term_name not in CONSTRUCTS or CONSTRUCTS[term_name] == 0, INCORRECT_SYNTAX_ERROR
+        assert term_name not in CONSTRUCTS or \
+               CONSTRUCTS[term_name] == 0, INCORRECT_SYNTAX_ERROR
         CONSTRUCTS[term_name] = 0
         return line, Term('const', term_name)
     line.pop()
     line, term = parse_term(line)
+    term_constrs = add_constr_count({}, term)
+    term_double = term.double
     term_args = [term]
     while line.peek() == ',':
         line.pop()
         line, term = parse_term(line)
+        if not term_double:
+            if term.double or (term.type == 'var' and term_args[-1].name == term.name):
+                term_double = True
         term_args.append(term)
+        term_constrs = add_constr_count(term_constrs, term)
     assert line.pop() == ')', INCORRECT_SYNTAX_ERROR
-    assert term_name not in CONSTRUCTS or CONSTRUCTS[term_name] == len(term_args), INCORRECT_SYNTAX_ERROR
+    assert term_name not in CONSTRUCTS or \
+           CONSTRUCTS[term_name] == len(term_args), INCORRECT_SYNTAX_ERROR
     CONSTRUCTS[term_name] = len(term_args)
-    return line, Term('constr', term_name, term_args)
+    return line, Term('constr', term_name, term_double, term_args, term_constrs)
 
 
 def parse_line(line: Queue):

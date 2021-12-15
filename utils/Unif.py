@@ -1,5 +1,4 @@
-from Parser import Term
-import Parser as p
+from utils.Parser import Term
 
 
 def is_var(term: Term):
