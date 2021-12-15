@@ -31,7 +31,6 @@ def solve():
     except Exception:
         return SYNTAX_ERROR
     for row in parsed:
-        print(row[0].unfold())
         mgu = unify(row[0], row[1])
         print(mgu)
     return TRUE

@@ -3,7 +3,7 @@ import Parser as p
 
 
 def is_var(term: Term):
-    return term.type == 'var'
+    return term.type == 'var' or term.type == 'const'
 
 
 def is_str(term: Term):
@@ -59,6 +59,7 @@ class UnifTable:
             ex = self.entries[ix]
             ey = self.entries[iy]
 
+
             # case 1
             if is_str(ex) and is_str(ey):
                 ax = ex.get_arity()
@@ -68,19 +69,30 @@ class UnifTable:
                 if ax > 0:
                     sx.extend(ex.components)
                     sy.extend(ey.components)
+
             # case 2
             elif is_str(ex) and is_var(ey):
                 idx, _, b = self.bind_str(ix, iy)
                 if not b:
                     sx.append(ix)
                     sy.append(idx)
+
+
             # case 3
             elif is_var(ex) and is_str(ey):
-                # bind
-                pass
+                idx, _, b = self.bind_str(iy, ix)
+                if not b:
+                    sx.append(idx)
+                    sy.append(iy)
+
+
             # case 4
             elif is_var(ex) and is_var(ey):
-                pass
+                idx1, idx2, b = self.bind_var(ix, iy)
+                if not b:
+                    sx.append(idx1)
+                    sx.append(idx2)
+
 
         return True
 
@@ -95,7 +107,10 @@ class UnifTable:
                 ok = False
         return idx
 
+
     def bind_var(self, var_idx1, var_idx2) -> (int, int, bool):
+        i1 = 0
+        i2 = 0
         f1 = False
         f2 = False
         if var_idx1 in self.bindings:
@@ -162,5 +177,5 @@ def unify(x: Term, y: Term) -> dict:
     for i, j in ut.bindings.items():
         j = ut.dereference(j)
         mgu[ut.entries[i].functor] = ut.term_string(j)
-
+    print(mgu)
     return mgu

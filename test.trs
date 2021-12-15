@@ -1,2 +1,2 @@
-[a,b]
-f(A,g(B,C),B,b) -> f(g(h(a,E),B),A,h(a,D),D)
+[x, y, z]
+f(w, g(y, f(w, y))) -> f(f(y,x), g(t(z), y))
