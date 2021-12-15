@@ -3,7 +3,7 @@ from utils.Unif import unify
 TEST_DIR = 'trs'
 
 from utils import timeout
-TIMEOUT_LIM = 160
+TIMEOUT_LIM = 30
 from itertools import permutations
 
 tests = dict(
@@ -118,12 +118,12 @@ def check_subterms_proliferation(rules, depth=10):
                 dfs(h-1)
             h -= 1
             stack.pop()
-    stack = []
     for rule in rules:
-        stack.append(rule[0])
+        stack = [rule[0]]
         if dfs(depth):
             return TRUE
     return UNK
+    # return FALSE
 
 
 if __name__ == '__main__':
@@ -133,4 +133,5 @@ if __name__ == '__main__':
     except Exception:
         result = UNK
     finally:
+        # print(result)
         write_result(result)
