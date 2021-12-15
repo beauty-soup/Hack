@@ -6,7 +6,7 @@ OR = '|'
 LETTER_REGEX = '[a-z]'
 DIGIT_REGEX = '[0-9]'
 
-INCORRECT_SYNTAX_ERROR = 'Синтаксическая ошибка'
+INCORRECT_SYNTAX_ERROR = 'Syntax_error'
 
 VARS = set()
 CONSTRUCTS = dict()

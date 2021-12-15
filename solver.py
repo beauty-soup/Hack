@@ -1,4 +1,4 @@
-from Parser import parse_file
+from Parser import parse_file, read_txt
 import argparse
 parser = argparse.ArgumentParser()
 
@@ -18,14 +18,27 @@ tests = dict(
 )
 test_f = 'test.trs'
 
-def main():
-    p = parse_file(test_f)
-    print(p)
+SYNTAX_ERROR = "Syntax_error"
+TRUE = "True"
+FALSE = "False"
+UNK = "Unknown"
 
 
+def write_result(result):
+    with open('result', 'w') as f:
+        f.write(result)
 
 
+def solve():
+    global test_counter
+    try:
+        raw = read_txt(test_f)
+        parsed = parse_file(test_f)
+    except Exception:
+        return SYNTAX_ERROR
+    return TRUE
 
 
 if __name__ == '__main__':
-    main()
+    result = solve()
+    write_result(result)

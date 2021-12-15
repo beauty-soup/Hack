@@ -1,4 +1,6 @@
 FROM ubuntu:18.04 as refal_host
+RUN apt-get update
+RUN apt-get install -y python3-pip
 
 RUN apt-get update
 RUN apt-get install -y git dos2unix curl unzip sed g++
@@ -24,3 +26,5 @@ RUN rlc total_results.ref
 RUN dos2unix run_test.sh
 RUN chmod +x run_test.sh
 ENTRYPOINT ["./run_test.sh"]
+
+
