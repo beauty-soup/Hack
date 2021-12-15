@@ -4,7 +4,7 @@ for (( count=1; count<=100; count++ ))
   do
     echo Test "$count"
     ./test_gen
-    timeout 5 python3 solver.py
+    timeout 170 python3 solver.py
     rm -f test.trs
     ./test_check
     rm -f result

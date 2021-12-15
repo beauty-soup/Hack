@@ -1,9 +1,10 @@
-from utils.Parser import parse_file, read_txt, Term
+from utils.Parser import parse_file, Term, parse_term, Queue
 from utils.Unif import unify
 TEST_DIR = 'trs'
 
 from utils import timeout
 TIMEOUT_LIM = 160
+from itertools import permutations
 
 tests = dict(
     {
@@ -42,11 +43,33 @@ def check_decreasing_on_signature(rules):
 
 
 def check_subterms_proliferation(rules):
-    pass
+    return UNK
 
 
-def check_decreasing_lexicographic_order(rules):
-    pass
+def check_decreasing_lexicographic_order(rules, constructors: list):
+    def is_lex_greater(t1: Term, t2: Term) -> bool:
+        nonlocal order
+        t1_args = t1.args[:-1]
+        t2_args = t2.args[:-1]
+        t2_len = len(t2_args)
+        for i, a1 in enumerate(t1_args):
+            if i < t2_len:
+                a2 = t2_args[i]
+                if order[a1] > order[a2]:
+                    return False
+            break
+        return True
+
+    for permutation in permutations(range(len(constructors))):
+        order = dict(zip(constructors, permutation))
+        flag = True
+        for t1, t2 in rules:
+            if not is_lex_greater(t1, t2):
+                flag = False
+                break
+        if flag:
+            return TRUE
+    return FALSE
 
 
 def analyze_system(rules):
@@ -67,14 +90,19 @@ def write_result(result):
     with open('result', 'w') as f:
         f.write(result)
 
+
 @timeout.timeout(TIMEOUT_LIM)
 def solve():
     try:
-        parsed = parse_file(test_f)
+        parsed, constructors = parse_file(test_f)
     except Exception:
         return SYNTAX_ERROR
-    # res = analyze_system(parsed)
-    return analyze_system(parsed)
+    for r in parsed:
+        for t in r:
+            print(t.is_singlton())
+    res = analyze_system(parsed)
+    res = check_decreasing_lexicographic_order(parsed, constructors.keys())
+    return res
 
 
 
