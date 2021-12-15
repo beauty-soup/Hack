@@ -38,6 +38,13 @@ class Term:
             res += '(' + ','.join([str(a) for a in self.args]) + ')'
         return res
 
+    def is_singleton(self):
+        if self.type == 'var':
+            return True
+        if len(self.args) != 1:
+            return False
+        return self.args[0].is_singleton()
+
     def alpha_transform(self, postfix: int):
         postfix = str(postfix)
         for i in range(len(self.args)):
@@ -184,7 +191,7 @@ def parse_line(line: Queue):
     return [term1, term2]
 
 
-def parse_file(file_name: str) -> list:
+def parse_file(file_name: str) -> (list, list):
     global VARS, CONSTRUCTS, TERMS
     rules = read_txt(file_name)
     res = []
@@ -192,4 +199,4 @@ def parse_file(file_name: str) -> list:
     VARS = parse_first_line(Queue(rules[0]))
     for rule in rules[1:]:
         res.append(parse_line(Queue(rule)))
-    return res
+    return res, CONSTRUCTS.keys()

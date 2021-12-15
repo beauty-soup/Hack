@@ -99,7 +99,7 @@ def solve():
         parsed, constructors = parse_file(test_f)
     except Exception:
         return SYNTAX_ERROR
-    res = analyze_system(parsed, constructors.keys())
+    res = analyze_system(parsed, constructors)
     all_terms = []
     for t1, t2 in parsed:
         all_terms.append(t1)
