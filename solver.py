@@ -120,9 +120,9 @@ def check_subterms_proliferation(rules, depth=10):
             t = stack[-1]
             for ch in t.to:
                 for s in stack:
-                    if unify(s, ch):
+                    if unify(s, TERMS[ch]):
                         return True
-                stack.append(ch)
+                stack.append(TERMS[ch])
                 dfs()
             h -= 1
             if h == 0:
