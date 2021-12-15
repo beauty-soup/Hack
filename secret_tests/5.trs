@@ -1,0 +1,10 @@
+[x]
+E(Q(q(q(E(E(E(W(E(E(q(W(q(x))))))))))))) -> Q(Q(W(q(E(W(W(E(W(E(q(x)))))))))))
+q(E(E(E(E(Q(E(E(q(x))))))))) -> E(Q(W(E(E(W(W(q(x))))))))
+E(Q(W(E(E(W(W(q(x)))))))) -> Q(E(E(Q(Q(E(q(E(Q(E(W(q(W(W(x))))))))))))))
+q(q(Q(Q(Q(E(W(W(W(E(E(Q(x)))))))))))) -> E(E(E(q(E(Q(W(W(W(x)))))))))
+E(E(Q(Q(E(q(E(Q(E(W(q(W(W(x))))))))))))) -> q(W(E(Q(Q(Q(W(E(E(W(W(x)))))))))))
+E(E(E(q(W(Q(q(E(q(E(E(q(Q(E(Q(Q(Q(E(x)))))))))))))))))) -> E(Q(Q(Q(W(Q(Q(W(E(E(Q(q(E(W(x))))))))))))))
+q(W(E(Q(Q(Q(W(E(E(W(W(x))))))))))) -> E(E(Q(E(E(Q(Q(E(q(E(Q(E(W(q(W(W(x))))))))))))))))
+
+ans: True

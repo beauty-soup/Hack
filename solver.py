@@ -1,4 +1,4 @@
-from utils.Parser import parse_file, Term, parse_term, Queue
+from utils.Parser import parse_file, Term, TERMS
 from utils.Unif import unify
 TEST_DIR = 'trs'
 
@@ -47,6 +47,7 @@ def check_subterms_proliferation(rules):
 
 
 def check_decreasing_lexicographic_order(rules, constructors: list):
+    print('lexer')
     def is_lex_greater(t1: Term, t2: Term) -> bool:
         nonlocal order
         t1_args = t1.args[:-1]
@@ -69,21 +70,22 @@ def check_decreasing_lexicographic_order(rules, constructors: list):
                 break
         if flag:
             return TRUE
-    return FALSE
+    return UNK
 
 
-def analyze_system(rules):
-    is_double = False
-    for rule in rules:
-        for r in rule:
-            if r.double:
-                is_double = True
-                break
-    if is_double:
+def analyze_system(rules, constructors):
+    is_decreasing = True
+    for t1, t2 in rules:
+        if t1.double or t2.double or \
+                (not t1.is_singleton() or not t2.is_singleton()):
+            is_decreasing = False
+            break
+    if is_decreasing:
+        if check_decreasing_on_signature(rules) or \
+                check_decreasing_lexicographic_order(rules, constructors):
+            return TRUE
+    else:
         return check_subterms_proliferation(rules)
-    if check_decreasing_on_signature(rules) or \
-            check_decreasing_lexicographic_order(rules):
-        return TRUE
     return UNK
 
 def write_result(result):
@@ -97,13 +99,42 @@ def solve():
         parsed, constructors = parse_file(test_f)
     except Exception:
         return SYNTAX_ERROR
-    for r in parsed:
-        for t in r:
-            print(t.is_singlton())
-    res = analyze_system(parsed)
-    res = check_decreasing_lexicographic_order(parsed, constructors.keys())
+    res = analyze_system(parsed, constructors.keys())
+    all_terms = []
+    for t1, t2 in parsed:
+        all_terms.append(t1)
+        all_terms.append(t2)
+    # for i in range(len(all_terms)):
+    #     for j in range(len(all_terms)):
+    #         if i != j:
+    #             print(unify(all_terms[i], all_terms[j]))
+
+    # print(res)
     return res
 
+
+def check_subterms_proliferation(rules, depth=10):
+    def dfs():
+        nonlocal h
+        while len(stack):
+            t = stack[-1]
+            for ch in t.to:
+                for s in stack:
+                    if unify(s, ch):
+                        return True
+                stack.append(ch)
+                dfs()
+            h -= 1
+            if h == 0:
+                return False
+            stack.pop()
+    stack = []
+    for rule in rules:
+        h = depth
+        stack.append(rule[0])
+        if dfs():
+            return TRUE
+    return UNK
 
 
 if __name__ == '__main__':

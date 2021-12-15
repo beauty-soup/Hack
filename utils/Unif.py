@@ -2,11 +2,11 @@ from utils.Parser import Term
 
 
 def is_var(term: Term):
-    return term.type == 'var' or term.type == 'const'
+    return term.type == 'var'
 
 
 def is_str(term: Term):
-    return not is_var(term)
+    return term.type =='constr' or term.type == 'const'
 
 class Entry:
     def __init__(self, term: str, functor: str, type: str):
@@ -170,7 +170,6 @@ def unify(x: Term, y: Term) -> dict:
     ix, iy = ut.look_up[x.s], ut.look_up[y.s]
     if not ut.unify(ix, iy):
         return None
-
 
     mgu = dict()
     for i, j in ut.bindings.items():
