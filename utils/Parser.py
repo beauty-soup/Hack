@@ -45,12 +45,6 @@ class Term:
             return False
         return self.args[0].is_singleton()
 
-    def alpha_transform(self, postfix: int):
-        postfix = str(postfix)
-        for i in range(len(self.args)):
-            if self.args[i].type == 'var':
-                self.args[i] += postfix
-        return self
 
     def unfold(self):
         res = [self]
@@ -166,7 +160,7 @@ def add_to_terms(term):
     for t in TERMS:
         if t.name == term.name:
             return
-    TERMS.append(term.alpha_transform(len(TERMS)))
+    TERMS.append(term)
 
 
 def find_term(t_name):

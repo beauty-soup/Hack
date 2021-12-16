@@ -101,6 +101,17 @@ def solve():
     res = analyze_system(parsed, constructors)
     return res
 
+def alpha_transform(term: Term, postfix: int) -> Term:
+    postfix = str(postfix)
+    args = [a + postfix for a in term.args if a.type == 'var']
+    return Term(
+        name=term.name,
+        type=term.type,
+        args=args,
+        constr_count=term.constr_count,
+        double=term.double,
+    )
+
 
 def check_subterms_proliferation(rules, depth=10) -> bool:
     def dfs(h):
@@ -108,7 +119,8 @@ def check_subterms_proliferation(rules, depth=10) -> bool:
             t = stack[-1]
             for ch in t.to:
                 for s in stack:
-                    if unify(s, TERMS[ch]):
+                    t1 = alpha_transform(s, 1)
+                    if unify(t1, TERMS[ch]):
                         return True
                 stack.append(TERMS[ch])
                 dfs(h-1)
@@ -120,6 +132,7 @@ def check_subterms_proliferation(rules, depth=10) -> bool:
             print('loop')
             return True
     return False
+
 
 
 if __name__ == '__main__':
