@@ -3,7 +3,7 @@ from utils.Unif import unify
 TEST_DIR = 'trs'
 
 from utils import timeout
-TIMEOUT_LIM = 160
+TIMEOUT_LIM = 60
 from itertools import permutations
 
 tests = dict(
@@ -39,6 +39,7 @@ def check_decreasing_on_signature(rules):
     for rule in rules:
         if not is_decreasing_on_signature(*rule):
             return False
+    print('signature')
     return True
 
 
@@ -65,7 +66,7 @@ def check_decreasing_lexicographic_order(rules, constructors: list):
                 flag = False
                 break
         if flag:
-            # print('lexer')
+            print('lexer')
             return TRUE
     return UNK
 
@@ -78,13 +79,13 @@ def analyze_system(rules, constructors):
             is_decreasing = False
             break
     if is_decreasing:
-        # print('signature')
-        if check_decreasing_on_signature(rules) or \
-                check_decreasing_lexicographic_order(rules, constructors):
+        if check_decreasing_on_signature(rules):
             return TRUE
     else:
-        return check_subterms_proliferation(rules)
+        if check_subterms_proliferation(rules):
+            return TRUE
     return UNK
+
 
 def write_result(result):
     with open('result', 'w') as f:
@@ -116,7 +117,7 @@ def check_subterms_proliferation(rules, depth=10):
     for rule in rules:
         stack = [rule[0]]
         if dfs(depth):
-            # print('loop')
+            print('loop')
             return TRUE
     return FALSE
 
@@ -128,5 +129,5 @@ if __name__ == '__main__':
     except Exception:
         result = UNK
     finally:
-        # print(result)
+        print(result)
         write_result(result)
