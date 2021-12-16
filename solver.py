@@ -63,7 +63,6 @@ def check_decreasing_lexicographic_order(rules, constructors: list) -> bool:
                 flag = False
                 break
         if flag:
-            print('lexer')
             return True
     return False
 
@@ -76,16 +75,13 @@ def analyze_system(rules, constructors) -> str:
             is_decreasing = False
             break
     if is_decreasing:
-        print('signature')
         if check_decreasing_on_signature(rules) or \
                 check_decreasing_lexicographic_order(rules, constructors):
             return TRUE
-        elif check_subterms_proliferation(rules):
-            return FALSE
-
-    elif check_subterms_proliferation(rules):
+    if check_subterms_proliferation(rules):
         return FALSE
     return UNK
+
 
 def write_result(result):
     with open('result', 'w') as f:
@@ -119,8 +115,8 @@ def check_subterms_proliferation(rules, depth=10) -> bool:
             t = stack[-1]
             for ch in t.to:
                 for s in stack:
-                    t1 = alpha_transform(s, 1)
-                    if unify(t1, TERMS[ch]):
+                    # s = alpha_transform(s, 1)
+                    if unify(s, TERMS[ch]):
                         return True
                 stack.append(TERMS[ch])
                 dfs(h-1)
@@ -129,7 +125,6 @@ def check_subterms_proliferation(rules, depth=10) -> bool:
     for rule in rules:
         stack = [rule[0]]
         if dfs(depth):
-            print('loop')
             return True
     return False
 
@@ -142,5 +137,4 @@ if __name__ == '__main__':
     except Exception:
         result = UNK
     finally:
-        print(result)
         write_result(result)

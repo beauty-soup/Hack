@@ -45,7 +45,6 @@ class Term:
             return False
         return self.args[0].is_singleton()
 
-
     def unfold(self):
         res = [self]
         for a in self.args:
