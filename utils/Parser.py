@@ -165,7 +165,7 @@ def add_to_terms(term):
     for t in TERMS:
         if t.name == term.name:
             return
-    TERMS.append(term)
+    TERMS.append(term.alpha_transform(len(TERMS)))
 
 
 def find_term(t_name):

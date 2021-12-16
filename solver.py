@@ -23,7 +23,6 @@ FALSE = "False"
 UNK = "Unknown"
 
 
-
 def is_decreasing_on_signature(t1: Term, t2: Term):
     c1 = t1.constr_count
     c2 = t2.constr_count
@@ -42,8 +41,7 @@ def check_decreasing_on_signature(rules):
     return True
 
 
-
-def check_decreasing_lexicographic_order(rules, constructors: list):
+def check_decreasing_lexicographic_order(rules, constructors: list) -> bool:
     def is_lex_greater(t1: Term, t2: Term) -> bool:
         nonlocal order
         t1_args = t1.args[:-1]
@@ -65,12 +63,12 @@ def check_decreasing_lexicographic_order(rules, constructors: list):
                 flag = False
                 break
         if flag:
-            # print('lexer')
-            return TRUE
-    return UNK
+            print('lexer')
+            return True
+    return False
 
 
-def analyze_system(rules, constructors):
+def analyze_system(rules, constructors) -> str:
     is_decreasing = True
     for t1, t2 in rules:
         if t1.double or t2.double or \
@@ -78,12 +76,15 @@ def analyze_system(rules, constructors):
             is_decreasing = False
             break
     if is_decreasing:
-        # print('signature')
+        print('signature')
         if check_decreasing_on_signature(rules) or \
                 check_decreasing_lexicographic_order(rules, constructors):
             return TRUE
-    else:
-        return check_subterms_proliferation(rules)
+        elif check_subterms_proliferation(rules):
+            return FALSE
+
+    elif check_subterms_proliferation(rules):
+        return FALSE
     return UNK
 
 def write_result(result):
@@ -101,7 +102,7 @@ def solve():
     return res
 
 
-def check_subterms_proliferation(rules, depth=10):
+def check_subterms_proliferation(rules, depth=10) -> bool:
     def dfs(h):
         while h:
             t = stack[-1]
@@ -116,9 +117,9 @@ def check_subterms_proliferation(rules, depth=10):
     for rule in rules:
         stack = [rule[0]]
         if dfs(depth):
-            # print('loop')
-            return TRUE
-    return FALSE
+            print('loop')
+            return True
+    return False
 
 
 if __name__ == '__main__':
@@ -128,5 +129,5 @@ if __name__ == '__main__':
     except Exception:
         result = UNK
     finally:
-        # print(result)
+        print(result)
         write_result(result)
