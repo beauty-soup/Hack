@@ -3,7 +3,7 @@ from utils.Unif import unify
 TEST_DIR = 'trs'
 
 from utils import timeout
-TIMEOUT_LIM = 160
+TIMEOUT_LIM = 60
 from itertools import permutations
 
 tests = dict(
@@ -77,8 +77,7 @@ def analyze_system(rules, constructors) -> str:
             is_decreasing = False
             break
     if is_decreasing:
-        if check_decreasing_on_signature(rules) or \
-                check_decreasing_lexicographic_order(rules, constructors):
+        if check_decreasing_on_signature(rules):
             return TRUE
     if check_subterms_proliferation(rules):
         return FALSE
@@ -98,6 +97,7 @@ def solve():
         return SYNTAX_ERROR
     res = analyze_system(parsed, constructors)
     return res
+
 
 def alpha_transform(term: Term, postfix: int) -> Term:
     postfix = str(postfix)
