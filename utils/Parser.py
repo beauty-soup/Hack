@@ -50,6 +50,7 @@ class Term:
         for i in range(len(self.args)):
             if self.args[i].type == 'var':
                 self.args[i] += postfix
+        return self
 
     def unfold(self):
         res = [self]
