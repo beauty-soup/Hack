@@ -38,6 +38,7 @@ def check_decreasing_on_signature(rules):
     for rule in rules:
         if not is_decreasing_on_signature(*rule):
             return False
+    print('signature')
     return True
 
 
@@ -63,6 +64,7 @@ def check_decreasing_lexicographic_order(rules, constructors: list) -> bool:
                 flag = False
                 break
         if flag:
+            print('lexer')
             return True
     return False
 
@@ -125,6 +127,7 @@ def check_subterms_proliferation(rules, depth=10) -> bool:
     for rule in rules:
         stack = [rule[0]]
         if dfs(depth):
+            print('dfs')
             return True
     return False
 
@@ -137,4 +140,5 @@ if __name__ == '__main__':
     except Exception:
         result = UNK
     finally:
+        print(result)
         write_result(result)
