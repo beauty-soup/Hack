@@ -3,7 +3,7 @@ from utils.Unif import unify
 TEST_DIR = 'trs'
 
 from utils import timeout
-TIMEOUT_LIM = 60
+TIMEOUT_LIM = 160
 from itertools import permutations
 
 tests = dict(
@@ -38,7 +38,6 @@ def check_decreasing_on_signature(rules):
     for rule in rules:
         if not is_decreasing_on_signature(*rule):
             return False
-    print('signature')
     return True
 
 
@@ -66,7 +65,6 @@ def check_decreasing_lexicographic_order(rules, constructors: list) -> bool:
                 flag = False
                 break
         if flag:
-            print('lexer')
             return True
     return False
 
@@ -81,7 +79,7 @@ def analyze_system(rules, constructors) -> str:
     if is_decreasing:
         if check_decreasing_on_signature(rules) or check_decreasing_lexicographic_order(rules, constructors):
             return TRUE
-    if check_subterms_proliferation(rules):
+    if check_subterms_proliferation(rules, len(rules)):
         return FALSE
     return UNK
 
@@ -101,9 +99,14 @@ def solve():
     return res
 
 
-def alpha_transform(term: Term, postfix: int) -> Term:
-    postfix = str(postfix)
-    args = [a + postfix for a in term.args if a.type == 'var']
+def alpha_transform(term: Term, postfix: str) -> Term:
+    args = []
+    for a in term.args:
+        if a.type == 'var':
+            args.append(Term(name=a.name+postfix, type=a.type, args=a.args,
+                             constr_count=a.constr_count, double=a.double))
+        else:
+            args.append(alpha_transform(a, postfix))
     return Term(
         name=term.name,
         type=term.type,
@@ -113,23 +116,24 @@ def alpha_transform(term: Term, postfix: int) -> Term:
     )
 
 
-def check_subterms_proliferation(rules, depth=10) -> bool:
+def check_subterms_proliferation(rules, depth) -> bool:
     def dfs(h):
-        while h:
+        while h and len(stack):
             t = stack[-1]
+            for s in stack[:-1]:
+                s = alpha_transform(s, '1')
+                u = unify(s, t)
+                if u:
+                    return True
             for ch in t.to:
-                for s in stack:
-                    # s = alpha_transform(s, 1)
-                    if unify(s, TERMS[ch]):
-                        return True
                 stack.append(TERMS[ch])
                 dfs(h-1)
             h -= 1
             stack.pop()
+            return False
     for rule in rules:
         stack = [rule[0]]
         if dfs(depth):
-            print('dfs')
             return True
     return False
 
@@ -139,8 +143,7 @@ if __name__ == '__main__':
     result = UNK
     try:
         result = solve()
-    except Exception:
+    except Exception as e:
         result = UNK
     finally:
-        print(result)
         write_result(result)

@@ -173,9 +173,11 @@ def find_term(t_name):
 def parse_line(line: Queue):
     line, term1 = parse_term(line)
     assert line.pop() == '-' and line.pop() == '>', INCORRECT_SYNTAX_ERROR
-    add_to_terms(term1)
     line, term2 = parse_term(line)
     assert line.is_empty(), INCORRECT_SYNTAX_ERROR
+    if term2.s in [str(t) for t in term1.args]:
+        return
+    add_to_terms(term1)
     idx = find_term(term2.name)
     if idx < 0:
         term1.to.append(len(TERMS))
@@ -193,5 +195,7 @@ def parse_file(file_name: str) -> (list, list):
     assert len(rules) > 1, INCORRECT_SYNTAX_ERROR
     VARS = parse_first_line(Queue(rules[0]))
     for rule in rules[1:]:
-        res.append(parse_line(Queue(rule)))
+        p_l = parse_line(Queue(rule))
+        if p_l:
+            res.append(p_l)
     return res, CONSTRUCTS.keys()

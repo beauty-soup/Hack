@@ -1,5 +1,5 @@
 [x]
-c(a(a(x)))->a(c(x))
-a(c(b(x)))->a(d(b(x)))
-a(d(x))->d(a(a(a(x))))
-b(d(x))->b(c(x))
+g(f(D,D))->f(H,f(D,E))
+f(x,x)->f(g(x),x)
+g(E)->E
+f(H,H)->f(D,E)
