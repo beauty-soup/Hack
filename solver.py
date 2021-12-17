@@ -45,16 +45,18 @@ def check_decreasing_on_signature(rules):
 def check_decreasing_lexicographic_order(rules, constructors: list) -> bool:
     def is_lex_greater(t1: Term, t2: Term) -> bool:
         nonlocal order
-        t1_args = t1.args[:-1]
-        t2_args = t2.args[:-1]
+        t1_args = t1.constrs_in
+        t2_args = t2.constrs_in
         t2_len = len(t2_args)
+        t1_len = len(t1_args)
         for i, a1 in enumerate(t1_args):
             if i < t2_len:
                 a2 = t2_args[i]
                 if order[a1] > order[a2]:
                     return False
-            break
-        return True
+            else:
+                break
+        return t1_len >= t2_len
 
     for permutation in permutations(range(len(constructors))):
         order = dict(zip(constructors, permutation))
@@ -77,7 +79,7 @@ def analyze_system(rules, constructors) -> str:
             is_decreasing = False
             break
     if is_decreasing:
-        if check_decreasing_on_signature(rules):
+        if check_decreasing_on_signature(rules) or check_decreasing_lexicographic_order(rules, constructors):
             return TRUE
     if check_subterms_proliferation(rules):
         return FALSE

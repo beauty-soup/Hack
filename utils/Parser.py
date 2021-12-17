@@ -30,6 +30,7 @@ class Term:
             self.constr_count[self.name] = 1
         self.args = args or []
         self.s = self.__str__()
+        self.constrs_in = self.s.replace(')', '').split('(')[:-1]
         self.to = []
 
     def __str__(self):
