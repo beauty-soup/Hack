@@ -15,21 +15,35 @@ FALSE = "False"
 UNK = "Unknown"
 
 
+
 def check_decreasing_on_signature(rules):
     def is_decreasing_on_signature(t1: Term, t2: Term):
-        c1 = t1.constr_count
-        c2 = t2.constr_count
-        if {*c1} - {*c2}:
-            return True
-        for k, v in c1.items():
-            if v > c2[k]:
+        args_1 = t1.args
+        args_2 = t2.args
+        for arg in args_1:
+            if is_decreasing_on_signature(arg, t2):
+                return True
+        l1 = len(args_1)
+        l2 = len(args_2)
+        if l1 >= l2:
+            flag = True
+            for arg in args_2:
+                if is_decreasing_on_signature(arg, t1):
+                    flag = False
+                    break
+            if flag:
+                if l1 == l2:
+                    for i in range(l1):
+                        if args_1[i].s != args_2[i].s and \
+                                is_decreasing_on_signature(args_2[i], args_1[i]):
+                            return False
                 return True
         return False
+
 
     for rule in rules:
         if not is_decreasing_on_signature(*rule):
             return False
-    # print('signature')
     return True
 
 
@@ -143,5 +157,5 @@ if __name__ == '__main__':
     except Exception as e:
         result = UNK
     finally:
-        print(result)
+        # print(result)
         write_result(result)
