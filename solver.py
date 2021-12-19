@@ -38,6 +38,8 @@ def check_decreasing_on_signature(rules):
     for rule in rules:
         if not is_decreasing_on_signature(*rule):
             return False
+
+    print('signature')
     return True
 
 
@@ -146,4 +148,5 @@ if __name__ == '__main__':
     except Exception as e:
         result = UNK
     finally:
+        print(result)
         write_result(result)

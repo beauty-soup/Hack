@@ -1,5 +1,9 @@
-[x]
-g(f(D,D))->f(H,f(D,E))
-f(x,x)->f(g(x),x)
-g(E)->E
-f(H,H)->f(D,E)
+[Y]
+q(W(W(W(E(E(E(E(Q(Y))))))))) -> W(W(E(E(E(W(W(q(E(Y)))))))))
+E(W(E(Q(W(E(W(q(W(E(W(W(Y)))))))))))) -> q(q(q(W(W(W(E(E(E(E(Q(Y)))))))))))
+E(q(Q(E(W(E(W(W(q(q(W(Q(q(W(q(q(Y)))))))))))))))) -> W(E(Q(E(W(W(W(E(Q(E(W(Y)))))))))))
+q(q(W(W(q(W(E(q(Q(E(Q(W(Q(Y))))))))))))) -> W(W(q(E(E(Q(W(Q(W(W(E(q(Y))))))))))))
+W(E(Q(E(W(W(W(E(Q(E(W(Y))))))))))) -> W(Q(E(q(W(E(W(W(E(E(E(q(E(W(W(W(Y))))))))))))))))
+W(W(E(E(E(W(W(q(E(Y))))))))) -> W(q(E(W(E(Q(Q(W(W(q(q(E(W(Q(W(Q(q(Q(Y))))))))))))))))))
+W(q(E(W(E(Q(Q(W(W(q(q(E(W(Q(W(Q(q(Q(Y)))))))))))))))))) -> W(W(Q(Q(W(W(E(E(Q(Q(Y))))))))))
+W(Q(E(q(W(E(W(W(E(E(E(q(E(W(W(W(Y)))))))))))))))) -> E(W(E(Q(W(E(W(q(W(E(W(W(Y))))))))))))
