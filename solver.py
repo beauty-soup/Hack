@@ -1,5 +1,3 @@
-import time
-
 from utils.Parser import parse_file, Term, TERMS, read_txt
 from utils.Unif import unify
 TEST_DIR = 'trs'
@@ -8,15 +6,7 @@ from utils import timeout
 TIMEOUT_LIM = 160
 from itertools import permutations
 
-tests = dict(
-    {
-        'dickson': [f'{TEST_DIR}/Dickson/test_dickson{i}.trs' for i in range(1, 5)],
-        'kruskal': [f'{TEST_DIR}/Kruskal/test_growing{i}.trs' for i in range(1, 5)],
-        'lex': [f'{TEST_DIR}/Lex/test_lex{i}.trs' for i in range(1, 5)],
-        'loop': [f'{TEST_DIR}/Loop/test_loop{i}.trs' for i in range(2, 5)],
-        'wfma': [f'{TEST_DIR}/WFMA/test_fuma{i}.trs' for i in range(1, 5)],
-    }
-)
+
 test_f = 'test.trs'
 
 SYNTAX_ERROR = "Syntax_error"
@@ -26,27 +16,13 @@ UNK = "Unknown"
 
 
 def check_decreasing_on_signature(rules):
-
     def is_decreasing_on_signature(t1: Term, t2: Term):
-        args_1 = t1.args
-        args_2 = t2.args
-        for arg in args_1:
-            if is_decreasing_on_signature(arg, t2):
-                return True
-        l1 = len(args_1)
-        l2 = len(args_2)
-        if l1 >= l2:
-            flag = True
-            for arg in args_2:
-                if is_decreasing_on_signature(arg, t1):
-                    flag = False
-                    break
-            if flag:
-                if l1 == l2:
-                    for i in range(l1):
-                        if args_1[i].s != args_2[i].s and \
-                                is_decreasing_on_signature(args_2[i], args_1[i]):
-                            return False
+        c1 = t1.constr_count
+        c2 = t2.constr_count
+        if {*c1} - {*c2}:
+            return True
+        for k, v in c1.items():
+            if v > c2[k]:
                 return True
         return False
 
@@ -167,5 +143,5 @@ if __name__ == '__main__':
     except Exception as e:
         result = UNK
     finally:
-        print(result)
+        # print(result)
         write_result(result)

@@ -1,3 +1,5 @@
 [x]
-g(k(f(f(h(x)))))     -> g(f(k(h(x))))
-h(h(f(h(f(k(x)))))) -> g(k(f(h(g(h(x))))))
+A(D(x)) -> B(D(x))
+C(x) -> B(x)
+B(x) -> C(x)
+C(x) -> A(x)
