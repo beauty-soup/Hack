@@ -1,4 +1,6 @@
-from utils.Parser import parse_file, Term, TERMS
+import time
+
+from utils.Parser import parse_file, Term, TERMS, read_txt
 from utils.Unif import unify
 TEST_DIR = 'trs'
 
@@ -23,24 +25,63 @@ FALSE = "False"
 UNK = "Unknown"
 
 
-def is_decreasing_on_signature(t1: Term, t2: Term):
-    c1 = t1.constr_count
-    c2 = t2.constr_count
-    if {*c1} - {*c2}:
-        return True
-    for k, v in c1.items():
-        if v > c2[k]:
-            return True
-    return False
-
-
 def check_decreasing_on_signature(rules):
+
+    def is_decreasing_on_signature(t1: Term, t2: Term):
+        args_1 = t1.args
+        args_2 = t2.args
+        for arg in args_1:
+            if is_decreasing_on_signature(arg, t2):
+                return True
+        l1 = len(args_1)
+        l2 = len(args_2)
+        if l1 >= l2:
+            flag = True
+            for arg in args_2:
+                if is_decreasing_on_signature(arg, t1):
+                    flag = False
+                    break
+            if flag:
+                if l1 == l2:
+                    for i in range(l1):
+                        if args_1[i].s != args_2[i].s and \
+                                is_decreasing_on_signature(args_2[i], args_1[i]):
+                            return False
+                return True
+        return False
+
     for rule in rules:
         if not is_decreasing_on_signature(*rule):
             return False
-
-    print('signature')
+    # print('signature')
     return True
+
+
+def check_subterms_proliferation(rules, depth) -> bool:
+    def dfs(h):
+        while h and len(stack):
+            t = stack[-1]
+            #if len(stack) > 1 and unify(stack[-2], t):
+            #    return True
+            for s in stack[:-1]: #stack[:-2]:
+                s = alpha_transform(s, '1')
+                if unify(s, t):
+                    return True
+            for ch in t.to:
+                stack.append(TERMS[ch])
+                if dfs(h-1):
+                    return True
+            h -= 1
+            stack.pop()
+            return False
+
+    for rule in rules:
+        stack = [rule[0]]
+        if dfs(depth):
+            # print('loop')
+            return True
+    return False
+
 
 
 def check_decreasing_lexicographic_order(rules, constructors: list) -> bool:
@@ -67,21 +108,32 @@ def check_decreasing_lexicographic_order(rules, constructors: list) -> bool:
                 flag = False
                 break
         if flag:
+            # print('lexer')
             return True
     return False
 
 
-def analyze_system(rules, constructors) -> str:
-    is_decreasing = True
+@timeout.timeout(TIMEOUT_LIM)
+def solve() -> str:
+    try:
+        rules, constructors = parse_file(test_f)
+    except Exception:
+        return SYNTAX_ERROR
+    is_double_term = False
+    is_single_val = True
     for t1, t2 in rules:
-        if t1.double or t2.double or \
-                (not t1.is_singleton() or not t2.is_singleton()):
-            is_decreasing = False
+        if t1.double or t2.double:
+            is_double_term = True
+            is_single_val = False
             break
-    if is_decreasing:
-        if check_decreasing_on_signature(rules) or check_decreasing_lexicographic_order(rules, constructors):
-            return TRUE
-    if check_subterms_proliferation(rules, len(rules)):
+        if not (t1.is_singleton() and t2.is_singleton()):
+            is_single_val = False
+            break
+    if is_single_val and check_decreasing_lexicographic_order(rules, constructors):
+        return TRUE
+    if not is_double_term and check_decreasing_on_signature(rules):
+        return TRUE
+    if check_subterms_proliferation(rules, len(rules) * 2):
         return FALSE
     return UNK
 
@@ -89,16 +141,6 @@ def analyze_system(rules, constructors) -> str:
 def write_result(result):
     with open('result', 'w') as f:
         f.write(result)
-
-
-@timeout.timeout(TIMEOUT_LIM)
-def solve():
-    try:
-        parsed, constructors = parse_file(test_f)
-    except Exception:
-        return SYNTAX_ERROR
-    res = analyze_system(parsed, constructors)
-    return res
 
 
 def alpha_transform(term: Term, postfix: str) -> Term:
@@ -116,29 +158,6 @@ def alpha_transform(term: Term, postfix: str) -> Term:
         constr_count=term.constr_count,
         double=term.double,
     )
-
-
-def check_subterms_proliferation(rules, depth) -> bool:
-    def dfs(h):
-        while h and len(stack):
-            t = stack[-1]
-            for s in stack[:-1]:
-                s = alpha_transform(s, '1')
-                u = unify(s, t)
-                if u:
-                    return True
-            for ch in t.to:
-                stack.append(TERMS[ch])
-                dfs(h-1)
-            h -= 1
-            stack.pop()
-            return False
-    for rule in rules:
-        stack = [rule[0]]
-        if dfs(depth):
-            return True
-    return False
-
 
 
 if __name__ == '__main__':

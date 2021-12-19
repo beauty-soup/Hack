@@ -1,0 +1,234 @@
+Test 1
+Unknown
+Test 2
+loop
+False
+Test 3
+signature
+True
+Test 4
+Unknown
+Test 5
+Unknown
+Test 6
+loop
+False
+Test 7
+loop
+False
+Test 8
+loop
+False
+Test 9
+lexer
+True
+Test 10
+lexer
+True
+Test 11
+signature
+True
+Test 12
+Unknown
+Test 13
+lexer
+True
+Test 14
+lexer
+True
+Test 15
+lexer
+True
+Test 16
+lexer
+True
+Test 17
+lexer
+True
+Test 18
+Unknown
+Test 19
+Unknown
+Test 20
+Unknown
+Test 21
+Unknown
+Test 22
+loop
+False
+Test 23
+loop
+False
+Test 24
+Unknown
+Test 25
+Unknown
+Test 26
+Unknown
+Test 27
+Unknown
+Test 28
+Unknown
+Test 29
+Unknown
+Test 30
+Unknown
+Test 31
+Unknown
+Test 32
+Unknown
+Test 33
+Unknown
+Test 34
+Unknown
+Test 35
+Unknown
+Test 36
+lexer
+True
+Test 37
+signature
+True
+Test 38
+Unknown
+Test 39
+Unknown
+Test 40
+Unknown
+Test 41
+Unknown
+Test 42
+Unknown
+Test 43
+Unknown
+Test 44
+Unknown
+Test 45
+Unknown
+Test 46
+Unknown
+Test 47
+Unknown
+Test 48
+Unknown
+Test 49
+Unknown
+Test 50
+Unknown
+Test 51
+Unknown
+Test 52
+Unknown
+Test 53
+Unknown
+Test 54
+Unknown
+Test 55
+Unknown
+Test 56
+Unknown
+Test 57
+Syntax_error
+Test 58
+Unknown
+Test 59
+loop
+False
+Test 60
+Unknown
+Test 61
+Unknown
+Test 62
+Unknown
+Test 63
+Unknown
+Test 64
+Unknown
+Test 65
+Unknown
+Test 66
+loop
+False
+Test 67
+Unknown
+Test 68
+loop
+False
+Test 69
+Unknown
+Test 70
+loop
+False
+Test 71
+loop
+False
+Test 72
+Unknown
+Test 73
+Unknown
+Test 74
+Syntax_error
+Test 75
+Unknown
+Test 76
+Unknown
+Test 77
+loop
+False
+Test 78
+loop
+False
+Test 79
+Unknown
+Test 80
+Unknown
+Test 81
+Unknown
+Test 82
+Unknown
+Test 83
+Unknown
+Test 84
+Unknown
+Test 85
+Unknown
+Test 86
+Unknown
+Test 87
+Unknown
+Test 88
+Unknown
+Test 89
+Unknown
+Test 90
+signature
+True
+Test 91
+Unknown
+Test 92
+loop
+False
+Test 93
+Unknown
+Test 94
+Unknown
+Test 95
+signature
+True
+Test 96
+Syntax_error
+Test 97
+Syntax_error
+Test 98
+Syntax_error
+Test 99
+Syntax_error
+Test 100
+Syntax_error
+Total 19  tests are passed successfully.
+Total 69  tests are passed inconsistently.
+Total 5  monsters are faced.
+Total 5  syntax errors are found.
+Total 2  syntax errors are misfound.
+Total 0  timeouts are reached.
+tests

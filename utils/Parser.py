@@ -163,9 +163,9 @@ def add_to_terms(term):
     TERMS.append(term)
 
 
-def find_term(t_name):
+def find_term(t_s):
     for i in range(len(TERMS)):
-        if TERMS[i].name == t_name:
+        if TERMS[i].s == t_s:
             return i
     return -1
 
