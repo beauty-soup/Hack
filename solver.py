@@ -143,5 +143,5 @@ if __name__ == '__main__':
     except Exception as e:
         result = UNK
     finally:
-        # print(result)
+        print(result)
         write_result(result)
